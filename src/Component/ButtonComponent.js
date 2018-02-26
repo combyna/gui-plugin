@@ -5,7 +5,7 @@ import React from 'react';
 const ButtonComponent = ({
     label
 }) => {
-    return <pre>{ label }</pre>
+    return <pre>Button: { label }</pre>
 }
 
 export default ButtonComponent;

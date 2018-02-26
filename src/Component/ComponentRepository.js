@@ -11,6 +11,7 @@ export default class ComponentRepository {
          */
         this.libraries = libraryNames.reduce((libraries, libraryName) => {
             libraries[libraryName] = {};
+            return libraries;
         }, {});
     }
 
