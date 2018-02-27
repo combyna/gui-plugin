@@ -1,15 +1,15 @@
 import ComponentRepository from './src/Component/ComponentRepository';
-import ButtonComponent from './src/Component/ButtonComponent';
 import PageViewComponent from './src/Component/PageViewComponent';
-import TextBoxComponent from './src/Component/TextBoxComponent'
-import BoxComponent from './src/Component/BoxComponent'
+import TestGenericWidgetComponent from './src/Component/TestGenericWidgetComponent';
 
 const componentRepository = new ComponentRepository([
-    'gui'
+    'bootflap'
 ]);
 
-componentRepository.addComponent('gui', 'button', ButtonComponent);
-componentRepository.addComponent('gui', 'textbox', TextBoxComponent);
-componentRepository.addComponent('gui', 'box', BoxComponent);
+componentRepository.addComponent('bootflap', 'testy', TestGenericWidgetComponent);
+
+// TODO: move Bootflap to it's own repo, and decide on how to distribute
+// right now, best option seems to be 1 repo with both languages, published to
+// both packagist and NPM
 
 export { componentRepository, PageViewComponent };

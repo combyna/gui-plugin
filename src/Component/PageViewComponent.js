@@ -53,23 +53,27 @@ export default class PageViewComponent extends React.Component {
             //     return Object.assign({}, props, eventProps);
             // }, {});
 
-            attributes.onClick = () => {
-                const newVisibleViewsState = this.props.client.dispatchEvent(
-                    this.state.visibleViewsState,
-                    widgetData.path,
-                    'gui',
-                    'click',
-                    {
-                        // FIXME: Pass these in from the event data
-                        x: 200,
-                        y: 100
-                    }
-                );
+            // if (widgetData.tag === 'button') {
+                attributes.onClick = (event) => {
+                    const newVisibleViewsState = this.props.client.dispatchEvent(
+                        this.state.visibleViewsState,
+                        widgetData.path,
+                        'gui',
+                        'click',
+                        {
+                            // FIXME: Pass these in from the event data
+                            x: 200,
+                            y: 100
+                        }
+                    );
 
-                this.setState({
-                    visibleViewsState: newVisibleViewsState
-                });
-            }
+                    event.stopPropagation();
+
+                    this.setState({
+                        visibleViewsState: newVisibleViewsState
+                    });
+                }
+            // }
 
             return (
                 widgetData.children.length
@@ -83,10 +87,6 @@ export default class PageViewComponent extends React.Component {
         if (widgetData.type === 'fragment') {
             return children;
         }
-
-
-
-
 
         throw new Error(`Widget type "${widgetData.type}" is not supported`);
     }
