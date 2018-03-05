@@ -1,0 +1,12 @@
+{
+    "name": "combyna/gui-react-plugin",
+    "description": "A plugin for Combyna that provides basic GUI components",
+    "autoload": {
+        "psr-4": {
+            "Combyna\\Plugin\\Gui\\": "php/src"
+        }
+    },
+    "require": {
+        "combyna/combyna": "dev-rush"
+    }
+}

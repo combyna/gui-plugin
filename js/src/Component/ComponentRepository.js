@@ -9,10 +9,7 @@ export default class ComponentRepository {
          * Library names to primitive widget definition React components
          * @type {Object.<string,{}>}
          */
-        this.libraries = libraryNames.reduce((libraries, libraryName) => {
-            libraries[libraryName] = {};
-            return libraries;
-        }, {});
+        this.libraries = {};
     }
 
     /**
@@ -27,7 +24,7 @@ export default class ComponentRepository {
         component
     ) {
         if (!Object.prototype.hasOwnProperty.call(this.libraries, libraryName)) {
-            throw new Error(`Library "${libraryName}" not defined`);
+            this.libraries[libraryName] = {};
         }
 
         this.libraries[libraryName][widgetDefinitionName] = component;
@@ -47,7 +44,7 @@ export default class ComponentRepository {
         }
 
         if (!Object.prototype.hasOwnProperty.call(this.libraries[libraryName], widgetDefinitionName)) {
-            throw new Error(`WidgetDefinition  "${widgetDefinitionName}" not defined`);
+            throw new Error(`Widget definition "${widgetDefinitionName}" not defined`);
         }
 
         return this.libraries[libraryName][widgetDefinitionName];
