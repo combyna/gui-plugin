@@ -1,10 +1,5 @@
 export default class ComponentRepository {
-    /**
-     * @param {string[]} libraryNames
-     */
-    constructor (
-        libraryNames = []
-    ) {
+    constructor () {
         /**
          * Library names to primitive widget definition React components
          * @type {Object.<string,{}>}
