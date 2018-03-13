@@ -18,17 +18,21 @@ export default class PageViewComponent extends React.Component {
             return widgetData.text;
         }
 
-        // if (widgetData.type === 'widget') {
-        //     const Component = this.componentRepository.getComponent(widgetData.library, widgetData.widget)
-        //
-        //     // TODO: render widget and recursively render children
-        //     return <Component>{ this.renderWidget(widgetData.root) }</Component>;
-        // }
-
-
         // TODO: decide whether to wrap primitive widgets in HOCs to map widgetData to props
         if (widgetData.type === 'widget') {
             return this.renderWidget(widgetData.root);
+        }
+
+        if (widgetData.type === 'generic') {
+            // "Generically"-rendered widgets do not define their child structure with rendered elements -
+            // instead, they each map to a React component which can then structure them as needed
+            const Component = this.componentRepository.getComponent(widgetData.library, widgetData.widget);
+
+            return (
+                <Component {...widgetData.attributes}>
+                    ...widgetData.children.map(childWidgetData => this.renderWidget(childWidgetData))
+                </Component>
+            );
         }
 
         if (widgetData.type === 'element') {
