@@ -1,5 +1,5 @@
 {
-    "name": "combyna/gui-react-plugin",
+    "name": "combyna/gui-plugin",
     "description": "A plugin for Combyna that provides basic GUI components",
     "autoload": {
         "psr-4": {
