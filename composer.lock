@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/combyna/combyna.git",
-                "reference": "360a11a808885f64fb6b4738cf6eef275714e112"
+                "reference": "dbbd957c5ea8aff92300e4cb0269d9e4c1cff39f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/combyna/combyna/zipball/360a11a808885f64fb6b4738cf6eef275714e112",
-                "reference": "360a11a808885f64fb6b4738cf6eef275714e112",
+                "url": "https://api.github.com/repos/combyna/combyna/zipball/dbbd957c5ea8aff92300e4cb0269d9e4c1cff39f",
+                "reference": "dbbd957c5ea8aff92300e4cb0269d9e4c1cff39f",
                 "shasum": ""
             },
             "require": {
@@ -54,7 +54,7 @@
                 }
             ],
             "description": "Combyna - build things.",
-            "time": "2018-02-14T13:20:46+00:00"
+            "time": "2018-03-13T13:51:59+00:00"
         },
         {
             "name": "combyna/php-peg",
