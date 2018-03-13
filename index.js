@@ -1,3 +1,3 @@
-import { react } from './react';
+import * as react from './react';
 
 export { react };
