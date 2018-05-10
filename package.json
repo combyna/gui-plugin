@@ -1,7 +1,7 @@
 {
   "name": "combyna-gui-plugin",
-  "version": "1.0.1",
-  "description": "",
+  "version": "2.0.0",
+  "description": "Base GUI plugin for Combyna",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
