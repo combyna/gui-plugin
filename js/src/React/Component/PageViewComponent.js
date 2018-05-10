@@ -1,3 +1,12 @@
+/**
+ * Combyna base GUI plugin
+ * Copyright (c) the Combyna project and contributors
+ * https://github.com/combyna/gui-plugin
+ *
+ * Released under the MIT license
+ * https://github.com/combyna/gui-plugin/raw/master/MIT-LICENSE.txt
+ */
+
 import React from 'react';
 
 // TODO: PropTypes validation
@@ -6,7 +15,7 @@ export default class PageViewComponent extends React.Component {
     constructor (props) {
         super(props);
 
-        this.componentRepository = props.componentRepository;
+        this.reactElementFactoryRepository = props.reactElementFactoryRepository;
 
         this.state = {
             visibleViewsState: props.client.createInitialState()
@@ -26,12 +35,47 @@ export default class PageViewComponent extends React.Component {
         if (widgetData.type === 'generic') {
             // "Generically"-rendered widgets do not define their child structure with rendered elements -
             // instead, they each map to a React component which can then structure them as needed
-            const Component = this.componentRepository.getComponent(widgetData.library, widgetData.widget);
+            // const Component = this.reactElementFactoryRepository.getComponent(widgetData.library, widgetData.widget);
+            //
+            // return (
+            //     <Component {...widgetData.attributes}>
+            //         ...widgetData.children.map(childWidgetData => this.renderWidget(childWidgetData))
+            //     </Component>
+            // );
 
-            return (
-                <Component {...widgetData.attributes}>
-                    ...widgetData.children.map(childWidgetData => this.renderWidget(childWidgetData))
-                </Component>
+            const elementFactory = this.reactElementFactoryRepository.getFactory(widgetData.library, widgetData.widget);
+
+            const dispatchEvent = (libraryName, eventName, eventPayload) => {
+
+                // FIXME: Decide whether/where to stop propagation
+                // event.stopPropagation();
+
+                this.setState((previousState, props) => {
+                    const newVisibleViewsState = props.client.dispatchEvent(
+                        previousState.visibleViewsState,
+                        widgetData.path,
+                        libraryName,
+                        eventName,
+                        eventPayload || {}
+                    );
+
+                    return {
+                        visibleViewsState: newVisibleViewsState
+                    };
+                });
+            };
+
+            // TODO: Actually pass these triggers (with their events) down from Combyna
+            const triggers = [
+                {library: 'gui', event: 'click'},
+                {library: 'example_gui', event: 'close_me'}
+            ];
+
+            return elementFactory(
+                widgetData.attributes,
+                widgetData.children.map(childWidgetData => this.renderWidget(childWidgetData)),
+                triggers,
+                dispatchEvent
             );
         }
 
@@ -59,22 +103,26 @@ export default class PageViewComponent extends React.Component {
 
             // if (widgetData.tag === 'button') {
                 attributes.onClick = (event) => {
-                    const newVisibleViewsState = this.props.client.dispatchEvent(
-                        this.state.visibleViewsState,
-                        widgetData.path,
-                        'gui',
-                        'click',
-                        {
-                            // FIXME: Pass these in from the event data
-                            x: 200,
-                            y: 100
-                        }
-                    );
 
-                    event.stopPropagation();
+                    // FIXME: Decide whether/where to stop propagation
+                    // event.stopPropagation();
 
-                    this.setState({
-                        visibleViewsState: newVisibleViewsState
+                    this.setState((previousState, props) => {
+                        const newVisibleViewsState = props.client.dispatchEvent(
+                            previousState.visibleViewsState,
+                            widgetData.path,
+                            'gui',
+                            'click',
+                            {
+                                // FIXME: Pass these in from the event data
+                                x: 200,
+                                y: 100
+                            }
+                        );
+
+                        return {
+                            visibleViewsState: newVisibleViewsState
+                        };
                     });
                 }
             // }
