@@ -18,7 +18,7 @@ export default class PageViewComponent extends React.Component {
         this.reactElementFactoryRepository = props.reactElementFactoryRepository;
 
         this.state = {
-            visibleViewsState: props.client.createInitialState()
+            visibleViewsState: props.visibleViewsState
         };
     }
 
