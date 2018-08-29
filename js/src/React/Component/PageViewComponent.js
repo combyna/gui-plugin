@@ -11,7 +11,7 @@ import React from 'react';
 
 // TODO: PropTypes validation
 
-export default class PageViewComponent extends React.Component {
+export default class PageViewComponent extends React.PureComponent {
     constructor (props) {
         super(props);
 
@@ -22,27 +22,19 @@ export default class PageViewComponent extends React.Component {
         };
     }
 
-    renderWidget (widgetData) {
+    renderWidget (widgetData, key) {
         if (widgetData.type === 'text') {
             return widgetData.text;
         }
 
         // TODO: decide whether to wrap primitive widgets in HOCs to map widgetData to props
         if (widgetData.type === 'widget') {
-            return this.renderWidget(widgetData.root);
+            return this.renderWidget(widgetData.root, key);
         }
 
         if (widgetData.type === 'generic') {
             // "Generically"-rendered widgets do not define their child structure with rendered elements -
             // instead, they each map to a React component which can then structure them as needed
-            // const Component = this.reactElementFactoryRepository.getComponent(widgetData.library, widgetData.widget);
-            //
-            // return (
-            //     <Component {...widgetData.attributes}>
-            //         ...widgetData.children.map(childWidgetData => this.renderWidget(childWidgetData))
-            //     </Component>
-            // );
-
             const elementFactory = this.reactElementFactoryRepository.getFactory(widgetData.library, widgetData.widget);
 
             const dispatchEvent = (libraryName, eventName, eventPayload) => {
@@ -59,9 +51,11 @@ export default class PageViewComponent extends React.Component {
                         eventPayload || {}
                     );
 
-                    return {
-                        visibleViewsState: newVisibleViewsState
-                    };
+                    return newVisibleViewsState === previousState.visibleViewsState ?
+                        previousState :
+                        {
+                            visibleViewsState: newVisibleViewsState
+                        };
                 });
             };
 
@@ -71,9 +65,14 @@ export default class PageViewComponent extends React.Component {
                 {library: 'example_gui', event: 'close_me'}
             ];
 
+            const attributes = Object.assign({}, widgetData.attributes, {
+                key: key
+            });
+
             return elementFactory(
-                widgetData.attributes,
-                widgetData.children.map(childWidgetData => this.renderWidget(childWidgetData)),
+                attributes,
+                // TODO: Avoid using the index as the key where possible
+                widgetData.children.map((childWidgetData, index) => this.renderWidget(childWidgetData, index)),
                 triggers,
                 dispatchEvent
             );
@@ -120,21 +119,31 @@ export default class PageViewComponent extends React.Component {
                             }
                         );
 
-                        return {
-                            visibleViewsState: newVisibleViewsState
-                        };
+                        return newVisibleViewsState === previousState.visibleViewsState ?
+                            previousState :
+                            {
+                                visibleViewsState: newVisibleViewsState
+                            };
                     });
                 }
             // }
 
             return (
-                widgetData.children.length
-                    ? <widgetData.tag { ...attributes }>{ widgetData.children ? widgetData.children.map(this.renderWidget.bind(this)) : '' }</widgetData.tag>
-                    : <widgetData.tag { ...attributes }/>
+                widgetData.children.length ?
+                    <widgetData.tag { ...attributes }>
+                        {
+                            widgetData.children ?
+                                // TODO: Avoid using the index as the key where possible
+                                widgetData.children.map((childWidgetData, index) => this.renderWidget(childWidgetData, index)) :
+                                ''
+                        }
+                    </widgetData.tag> :
+                    <widgetData.tag { ...attributes }/>
             );
         }
 
-        const children = widgetData.children.map(this.renderWidget.bind(this));
+        // TODO: Avoid using the index as the key where possible
+        const children = widgetData.children.map((childWidgetData, index) => this.renderWidget(childWidgetData, index));
 
         if (widgetData.type === 'fragment') {
             return children;
@@ -147,7 +156,11 @@ export default class PageViewComponent extends React.Component {
         const renderedViewsData = this.props.client.renderVisibleViews(this.state.visibleViewsState);
 
         return renderedViewsData.map((viewData) => {
-            return <div className="view">{ this.renderWidget(viewData.widget) }</div>;
+            return (
+                <div className="view" key={viewData['view-name']}>
+                    { this.renderWidget(viewData.widget, null) }
+                </div>
+            );
         });
     }
 
