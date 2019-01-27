@@ -28,6 +28,10 @@ widgets:
     textbox:
         type: primitive
         attributes: {value: text}
+        values:
+            text:
+                type: text
+                default: !expr widget_attr('value')
         children: [] # Textboxes can have no children, as there is nowhere to render them
         groups: [gui.primitive]
         events: []
