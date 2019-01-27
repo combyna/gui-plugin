@@ -20,4 +20,5 @@ use Combyna\Component\Plugin\AbstractPlugin;
  */
 class GuiPlugin extends AbstractPlugin
 {
+    const GUI_LIBRARY = 'gui';
 }
