@@ -20,6 +20,8 @@ export default class PageViewComponent extends React.PureComponent {
         this.state = {
             visibleViewsState: props.visibleViewsState
         };
+
+        this.valueProviderRepository = props.valueProviderRepository;
     }
 
     renderWidget (widgetData, key) {
@@ -27,7 +29,8 @@ export default class PageViewComponent extends React.PureComponent {
             return widgetData.text;
         }
 
-        // TODO: decide whether to wrap primitive widgets in HOCs to map widgetData to props
+        // TODO: Wrap primitive widgets in HOCs to map widgetData to props
+        //       for handling things like value attr -> defaultValue prop (see below)
         if (widgetData.type === 'widget') {
             return this.renderWidget(widgetData.root, key);
         }
@@ -100,7 +103,8 @@ export default class PageViewComponent extends React.PureComponent {
             //     return Object.assign({}, props, eventProps);
             // }, {});
 
-            // if (widgetData.tag === 'button') {
+            // TODO: Install these event listener props outside this component
+            if (widgetData.tag === 'button') {
                 attributes.onClick = (event) => {
 
                     // FIXME: Decide whether/where to stop propagation
@@ -126,7 +130,27 @@ export default class PageViewComponent extends React.PureComponent {
                             };
                     });
                 }
-            // }
+            }
+
+            // TODO: Use HOCs to do this custom prop/ref manipulation (see above)
+            if (widgetData.tag === 'input' || widgetData.tag === 'select' || widgetData.tag === 'textarea') {
+                // For fields, use a callback ref to give us access to the rendered DOM element
+                // so that we can fetch its value(s)/UI state
+                attributes.ref = (element) => {
+                    this.valueProviderRepository.setReferencedWidgetElement(widgetData.path, element);
+                };
+            }
+
+            // TODO: Use HOC (see above)
+            if (widgetData.tag === 'input') {
+                if (attributes.type === 'text') {
+                    // We use uncontrolled inputs in Combyna, to improve performance by reducing
+                    // the amount of re-renders when editing a field and to better support browser extensions
+                    // like password managers that might edit a field
+                    attributes.defaultValue = attributes.value;
+                    delete attributes.value;
+                }
+            }
 
             return (
                 widgetData.children.length ?
