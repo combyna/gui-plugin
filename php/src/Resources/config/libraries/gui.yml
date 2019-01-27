@@ -21,6 +21,10 @@ widgets:
         children: [] # Buttons can have no children, only a label (TODO: allow icons?)
         groups: [gui.primitive]
         events: [gui.click]
+    horizontal_rule:
+        type: primitive
+        groups: [gui.primitive]
+        events: [gui.click]
     textbox:
         type: primitive
         attributes: {value: text}

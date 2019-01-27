@@ -11,6 +11,14 @@ services:
         tags:
             - {name: combyna.html_widget_renderer}
 
+    combyna_gui.renderer.html.horizontal_rule_widget:
+        class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\EmptyWidgetRenderer
+        arguments:
+            - 'horizontal_rule'
+            - 'hr'
+        tags:
+            - {name: combyna.html_widget_renderer}
+
     combyna_gui.renderer.html.textbox_widget:
         class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\TextboxWidgetRenderer
         autowire: true
