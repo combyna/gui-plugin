@@ -18,7 +18,7 @@ export default class PageViewComponent extends React.PureComponent {
         this.reactElementFactoryRepository = props.reactElementFactoryRepository;
 
         this.state = {
-            visibleViewsState: props.visibleViewsState
+            appState: props.appState
         };
 
         this.valueProviderRepository = props.valueProviderRepository;
@@ -46,18 +46,18 @@ export default class PageViewComponent extends React.PureComponent {
                 // event.stopPropagation();
 
                 this.setState((previousState, props) => {
-                    const newVisibleViewsState = props.client.dispatchEvent(
-                        previousState.visibleViewsState,
+                    const newAppState = props.client.dispatchEvent(
+                        previousState.appState,
                         widgetData.path,
                         libraryName,
                         eventName,
                         eventPayload || {}
                     );
 
-                    return newVisibleViewsState === previousState.visibleViewsState ?
+                    return newAppState === previousState.appState ?
                         previousState :
                         {
-                            visibleViewsState: newVisibleViewsState
+                            appState: newAppState
                         };
                 });
             };
@@ -111,8 +111,8 @@ export default class PageViewComponent extends React.PureComponent {
                     // event.stopPropagation();
 
                     this.setState((previousState, props) => {
-                        const newVisibleViewsState = props.client.dispatchEvent(
-                            previousState.visibleViewsState,
+                        const newAppState = props.client.dispatchEvent(
+                            previousState.appState,
                             widgetData.path,
                             'gui',
                             'click',
@@ -123,10 +123,10 @@ export default class PageViewComponent extends React.PureComponent {
                             }
                         );
 
-                        return newVisibleViewsState === previousState.visibleViewsState ?
+                        return newAppState === previousState.appState ?
                             previousState :
                             {
-                                visibleViewsState: newVisibleViewsState
+                                appState: newAppState
                             };
                     });
                 }
@@ -177,7 +177,7 @@ export default class PageViewComponent extends React.PureComponent {
     }
 
     renderViewsData () {
-        const renderedViewsData = this.props.client.renderVisibleViews(this.state.visibleViewsState);
+        const renderedViewsData = this.props.client.renderVisibleViews(this.state.appState);
 
         return renderedViewsData.map((viewData) => {
             return (
