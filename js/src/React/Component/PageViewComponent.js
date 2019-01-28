@@ -139,6 +139,24 @@ export default class PageViewComponent extends React.PureComponent {
                 attributes.ref = (element) => {
                     this.valueProviderRepository.setReferencedWidgetElement(widgetData.path, element);
                 };
+
+                // Support data binding by redrawing the page (if applicable)
+                // when a field is edited
+                // TODO: Optimise this to only add this change listener when the widget
+                //       sets a capture using an expression that reads one of its widget values
+                attributes.onChange = () => {
+                    this.setState((previousState, props) => {
+                        const newAppState = props.client.reevaluateUiState(
+                            previousState.appState
+                        );
+
+                        return newAppState === previousState.appState ?
+                            previousState :
+                            {
+                                appState: newAppState
+                            };
+                    });
+                };
             }
 
             // TODO: Use HOC (see above)
