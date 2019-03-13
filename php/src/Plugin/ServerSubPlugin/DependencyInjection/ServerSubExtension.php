@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Combyna
+ * Combyna base GUI plugin
  * Copyright (c) the Combyna project and contributors
- * https://github.com/combyna/combyna
+ * https://github.com/combyna/gui-plugin
  *
  * Released under the MIT license
- * https://github.com/combyna/combyna/raw/master/MIT-LICENSE.txt
+ * https://github.com/combyna/gui-plugin/raw/master/MIT-LICENSE.txt
  */
 
 namespace Combyna\Plugin\Gui\Plugin\ServerSubPlugin\DependencyInjection;
