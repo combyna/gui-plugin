@@ -12,6 +12,7 @@
 namespace Combyna\Plugin\Gui;
 
 use Combyna\Component\Plugin\AbstractPlugin;
+use Combyna\Plugin\Gui\Plugin\ServerSubPlugin\ServerSubPlugin;
 
 /**
  * Class GuiPlugin
@@ -21,4 +22,14 @@ use Combyna\Component\Plugin\AbstractPlugin;
 class GuiPlugin extends AbstractPlugin
 {
     const GUI_LIBRARY = 'gui';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubPlugins()
+    {
+        return [
+            new ServerSubPlugin()
+        ];
+    }
 }

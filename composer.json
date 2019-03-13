@@ -12,9 +12,6 @@
             "php": "7.1"
         }
     },
-    "scripts": {
-        "build:expression-parser": "mkdir -p ./php/dist/Combyna/Component/ExpressionLanguage && peg ./vendor/combyna/combyna/php/src/Combyna/Component/ExpressionLanguage/PegExpressionParser.php.inc ./php/dist/Combyna/Component/ExpressionLanguage/PegExpressionParser.php"
-    },
     "require-dev": {
         "combyna/combyna": "dev-rush",
         "phpunit/phpunit": "^4.6"

@@ -1,0 +1,5 @@
+services:
+    combyna_gui.server.gui_textbox_value_provider:
+        class: Combyna\Plugin\Gui\Plugin\ServerSubPlugin\WidgetValueProvider\GuiTextboxValueProvider
+        tags:
+            - {name: combyna.widget_value_provider}

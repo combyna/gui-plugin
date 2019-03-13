@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/combyna/combyna.git",
-                "reference": "a360b739d7d1e3fa9bc0313933937f06f5f6e5e5"
+                "reference": "27647ecb07c03a25c84f97d37fc9636d684b8ffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/combyna/combyna/zipball/a360b739d7d1e3fa9bc0313933937f06f5f6e5e5",
-                "reference": "a360b739d7d1e3fa9bc0313933937f06f5f6e5e5",
+                "url": "https://api.github.com/repos/combyna/combyna/zipball/27647ecb07c03a25c84f97d37fc9636d684b8ffa",
+                "reference": "27647ecb07c03a25c84f97d37fc9636d684b8ffa",
                 "shasum": ""
             },
             "require": {
@@ -32,7 +32,7 @@
                 "symfony/yaml": "~2.8.0"
             },
             "require-dev": {
-                "combyna/gui-plugin": "~2.1",
+                "combyna/gui-plugin": "dev-master",
                 "elliotchance/concise": "^2.1",
                 "phpunit/phpunit": "^4.6"
             },
@@ -56,7 +56,7 @@
                 }
             ],
             "description": "Combyna - build things.",
-            "time": "2019-01-28T20:49:36+00:00"
+            "time": "2019-03-12T22:49:23+00:00"
         },
         {
             "name": "combyna/php-peg",
@@ -805,6 +805,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2015-10-02T06:51:40+00:00"
         },
         {
