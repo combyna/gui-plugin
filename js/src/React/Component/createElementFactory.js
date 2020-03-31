@@ -10,15 +10,17 @@
 import React from 'react';
 
 const defaultMapAttributesToProps = attributes => attributes;
-const defaultMapTriggersToProps = triggers => triggers;
+const defaultMapTriggersToProps = () => {};
+const defaultMapUniqueIdToProps = () => {};
 
 export default ({
     Component,
     builtinTriggerMappingRepository,
     mapAttributesToProps = defaultMapAttributesToProps,
-    mapTriggersToProps = defaultMapTriggersToProps
+    mapTriggersToProps = defaultMapTriggersToProps,
+    mapUniqueIdToProps = defaultMapUniqueIdToProps
 }) => {
-    return (attributes, children, triggers, dispatchEvent) => {
+    return (attributes, children, triggers, dispatchEvent, uniqueId) => {
         const props = {};
 
         const importTriggerMappings = (mappingGroupName) => {
@@ -42,8 +44,8 @@ export default ({
         mapTriggersToProps(mapTrigger, importTriggerMappings, dispatchEvent);
 
         return (
-            <Component {...mapAttributesToProps(attributes)} {...props}>
-                ...children
+            <Component {...mapAttributesToProps(attributes)} {...mapUniqueIdToProps(uniqueId)} {...props}>
+                {children}
             </Component>
         );
     };

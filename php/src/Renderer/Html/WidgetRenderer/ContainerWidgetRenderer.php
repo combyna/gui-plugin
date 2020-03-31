@@ -14,6 +14,7 @@ namespace Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer;
 use Combyna\Component\Program\ProgramInterface;
 use Combyna\Component\Renderer\Html\HtmlElement;
 use Combyna\Component\Renderer\Html\RenderedWidget;
+use Combyna\Component\Renderer\Html\WidgetRenderer\DelegatingWidgetRenderer;
 use Combyna\Component\Renderer\Html\WidgetRenderer\WidgetRendererInterface;
 use Combyna\Component\Ui\State\Widget\DefinedWidgetStateInterface;
 use Combyna\Component\Ui\State\Widget\WidgetStateInterface;
@@ -21,12 +22,20 @@ use Combyna\Component\Ui\State\Widget\WidgetStatePathInterface;
 use InvalidArgumentException;
 
 /**
- * Class EmptyWidgetRenderer
+ * Class ContainerWidgetRenderer
+ *
+ * Used for any widget that is a container with additional semantics.
+ * Examples are list items and navigation.
  *
  * @author Dan Phillimore <dan@ovms.co>
  */
-class EmptyWidgetRenderer implements WidgetRendererInterface
+class ContainerWidgetRenderer implements WidgetRendererInterface
 {
+    /**
+     * @var DelegatingWidgetRenderer
+     */
+    private $delegatingWidgetRenderer;
+
     /**
      * @var string
      */
@@ -38,23 +47,18 @@ class EmptyWidgetRenderer implements WidgetRendererInterface
     private $widgetDefinitionName;
 
     /**
-     * @var array
-     */
-    private $widgetToHtmlAttributeNameMap;
-
-    /**
+     * @param DelegatingWidgetRenderer $delegatingWidgetRenderer
      * @param string $widgetDefinitionName
      * @param string $tagName
-     * @param array $widgetToHtmlAttributeNameMap
      */
     public function __construct(
+        DelegatingWidgetRenderer $delegatingWidgetRenderer,
         $widgetDefinitionName,
-        $tagName,
-        array $widgetToHtmlAttributeNameMap = []
+        $tagName
     ) {
+        $this->delegatingWidgetRenderer = $delegatingWidgetRenderer;
         $this->tagName = $tagName;
         $this->widgetDefinitionName = $widgetDefinitionName;
-        $this->widgetToHtmlAttributeNameMap = $widgetToHtmlAttributeNameMap;
     }
 
     /**
@@ -94,15 +98,15 @@ class EmptyWidgetRenderer implements WidgetRendererInterface
             ));
         }
 
+        $childNode = $this->delegatingWidgetRenderer->renderWidget(
+            $widgetStatePath->getChildStatePath('contents'),
+            $program
+        );
         $htmlAttributes = [];
-
-        foreach ($this->widgetToHtmlAttributeNameMap as $widgetAttributeName => $htmlAttributeName) {
-            $htmlAttributes[$htmlAttributeName] = $widgetState->getAttribute($widgetAttributeName)->toNative();
-        }
 
         return new RenderedWidget(
             $widgetState,
-            new HtmlElement($this->tagName, $widgetStatePath->getWidgetStatePath(), $htmlAttributes)
+            new HtmlElement($this->tagName, $widgetStatePath->getWidgetStatePath(), $htmlAttributes, [$childNode])
         );
     }
 }

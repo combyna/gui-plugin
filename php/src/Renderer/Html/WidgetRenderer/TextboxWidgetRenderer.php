@@ -11,6 +11,7 @@
 
 namespace Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer;
 
+use Combyna\Component\Program\ProgramInterface;
 use Combyna\Component\Renderer\Html\HtmlElement;
 use Combyna\Component\Renderer\Html\RenderedWidget;
 use Combyna\Component\Renderer\Html\WidgetRenderer\DelegatingWidgetRenderer;
@@ -59,8 +60,11 @@ class TextboxWidgetRenderer implements WidgetRendererInterface
     /**
      * {@inheritdoc}
      */
-    public function renderWidget(WidgetStateInterface $widgetState, WidgetStatePathInterface $widgetStatePath)
-    {
+    public function renderWidget(
+        WidgetStateInterface $widgetState,
+        WidgetStatePathInterface $widgetStatePath,
+        ProgramInterface $program
+    ) {
         if (
             !$widgetState instanceof DefinedWidgetStateInterface ||
             $widgetState->getWidgetDefinitionLibraryName() !== $this->getWidgetDefinitionLibraryName() ||

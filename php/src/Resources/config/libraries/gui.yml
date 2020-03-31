@@ -21,10 +21,75 @@ widgets:
         children: [] # Buttons can have no children, only a label (TODO: allow icons?)
         groups: [gui.primitive]
         events: [gui.click]
+    container:
+        type: primitive
+        children:
+            contents: ~
+        groups: [gui.primitive]
+        events: [gui.click]
+    heading:
+        type: primitive
+        attributes: {level: number}
+        children:
+            contents: ~
+        groups: [gui.primitive]
+        events: [gui.click]
     horizontal_rule:
         type: primitive
         groups: [gui.primitive]
         events: [gui.click]
+    list:
+        type: primitive
+        attributes:
+            ordered:
+                type: boolean
+                default: !expr false
+        children:
+            items: ~
+        groups: [gui.primitive]
+        events: [gui.click]
+    list_item:
+        type: primitive
+        children:
+            contents: ~
+        groups: [gui.primitive]
+        events: [gui.click]
+    navigation:
+        type: primitive
+        children:
+            contents: ~
+        groups: [gui.primitive]
+        events: [gui.click]
+    route_link:
+        type: compound
+        attributes:
+            route:
+                type: exotic
+                name: route_name
+                arguments_static: arguments
+            arguments:
+                type: exotic
+                name: route_arguments
+                route_static: route
+                default: '!expr {}'
+        children:
+            contents: ~
+        events: [gui.click]
+        root:
+            type: gui.url_link
+            attributes:
+                url: >
+                    !expr route_url(route: widget_attr('route'), arguments: widget_attr('arguments'))
+            children:
+                contents:
+                    type: child
+                    name: contents
+            triggers:
+                gui.click:
+                    instructions:
+                        - type: navigate
+                          route: !expr widget_attr('route')
+                          arguments: !expr widget_attr('arguments')
     textbox:
         type: primitive
         attributes: {value: text}
@@ -35,3 +100,9 @@ widgets:
         children: [] # Textboxes can have no children, as there is nowhere to render them
         groups: [gui.primitive]
         events: []
+    url_link:
+        type: primitive
+        attributes: {url: text}
+        children:
+            contents: ~
+        events: [gui.click]

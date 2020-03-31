@@ -11,6 +11,21 @@ services:
         tags:
             - {name: combyna.html_widget_renderer}
 
+    combyna_gui.renderer.html.container_widget:
+        class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\ContainerWidgetRenderer
+        arguments:
+            - '@combyna.renderer.html.widget'
+            - 'container'
+            - 'div'
+        tags:
+            - {name: combyna.html_widget_renderer}
+
+    combyna_gui.renderer.html.heading_widget:
+        class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\HeadingWidgetRenderer
+        autowire: true
+        tags:
+            - {name: combyna.html_widget_renderer}
+
     combyna_gui.renderer.html.horizontal_rule_widget:
         class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\EmptyWidgetRenderer
         arguments:
@@ -19,8 +34,38 @@ services:
         tags:
             - {name: combyna.html_widget_renderer}
 
+    combyna_gui.renderer.html.list_item_widget:
+        class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\ContainerWidgetRenderer
+        arguments:
+            - '@combyna.renderer.html.widget'
+            - 'list_item'
+            - 'li'
+        tags:
+            - {name: combyna.html_widget_renderer}
+
+    combyna_gui.renderer.html.list_widget:
+        class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\ListWidgetRenderer
+        autowire: true
+        tags:
+            - {name: combyna.html_widget_renderer}
+
+    combyna_gui.renderer.html.navigation_widget:
+        class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\ContainerWidgetRenderer
+        arguments:
+            - '@combyna.renderer.html.widget'
+            - 'navigation'
+            - 'nav'
+        tags:
+            - {name: combyna.html_widget_renderer}
+
     combyna_gui.renderer.html.textbox_widget:
         class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\TextboxWidgetRenderer
+        autowire: true
+        tags:
+            - {name: combyna.html_widget_renderer}
+
+    combyna_gui.renderer.html.url_link_widget:
+        class: Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer\UrlLinkWidgetRenderer
         autowire: true
         tags:
             - {name: combyna.html_widget_renderer}

@@ -62,29 +62,25 @@ export default class PageViewComponent extends React.PureComponent {
                 });
             };
 
-            // TODO: Actually pass these triggers (with their events) down from Combyna
-            const triggers = [
-                {library: 'gui', event: 'click'},
-                {library: 'example_gui', event: 'close_me'}
-            ];
-
             const attributes = Object.assign({}, widgetData.attributes, {
                 key: key
             });
+            const uniqueId = widgetData.path.join('-');
 
             return elementFactory(
                 attributes,
                 // TODO: Avoid using the index as the key where possible
                 widgetData.children.map((childWidgetData, index) => this.renderWidget(childWidgetData, index)),
-                triggers,
-                dispatchEvent
+                widgetData.triggers,
+                dispatchEvent,
+                uniqueId
             );
         }
 
         if (widgetData.type === 'element') {
-            const uniqueID = widgetData.path.join('-');
+            const uniqueId = widgetData.path.join('-');
             const attributes = Object.assign({}, widgetData.attributes, {
-                key: uniqueID
+                key: uniqueId
             });
 
 
@@ -104,11 +100,13 @@ export default class PageViewComponent extends React.PureComponent {
             // }, {});
 
             // TODO: Install these event listener props outside this component
-            if (widgetData.tag === 'button') {
+            if (widgetData.tag === 'button' || widgetData.tag === 'a') {
                 attributes.onClick = (event) => {
 
                     // FIXME: Decide whether/where to stop propagation
-                    // event.stopPropagation();
+                    event.stopPropagation();
+
+                    event.preventDefault();
 
                     this.setState((previousState, props) => {
                         const newAppState = props.client.dispatchEvent(
@@ -177,7 +175,7 @@ export default class PageViewComponent extends React.PureComponent {
                             widgetData.children ?
                                 // TODO: Avoid using the index as the key where possible
                                 widgetData.children.map((childWidgetData, index) => this.renderWidget(childWidgetData, index)) :
-                                ''
+                                []
                         }
                     </widgetData.tag> :
                     <widgetData.tag { ...attributes }/>

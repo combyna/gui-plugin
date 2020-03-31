@@ -7,13 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dan Phillimore <dan@ovms.co>",
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "react": "^16.2.0"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1"
   }
 }

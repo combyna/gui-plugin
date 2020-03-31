@@ -11,6 +11,7 @@
 
 namespace Combyna\Plugin\Gui\Renderer\Html\WidgetRenderer;
 
+use Combyna\Component\Program\ProgramInterface;
 use Combyna\Component\Renderer\Html\HtmlElement;
 use Combyna\Component\Renderer\Html\RenderedWidget;
 use Combyna\Component\Renderer\Html\WidgetRenderer\DelegatingWidgetRenderer;
@@ -59,8 +60,11 @@ class BoxWidgetRenderer implements WidgetRendererInterface
     /**
      * {@inheritdoc}
      */
-    public function renderWidget(WidgetStateInterface $widgetState, WidgetStatePathInterface $widgetStatePath)
-    {
+    public function renderWidget(
+        WidgetStateInterface $widgetState,
+        WidgetStatePathInterface $widgetStatePath,
+        ProgramInterface $program
+    ) {
         if (
             !$widgetState instanceof DefinedWidgetStateInterface ||
             $widgetState->getWidgetDefinitionLibraryName() !== $this->getWidgetDefinitionLibraryName() ||
@@ -69,7 +73,10 @@ class BoxWidgetRenderer implements WidgetRendererInterface
             throw new InvalidArgumentException('Box widget renderer must receive a gui.box widget');
         }
 
-        $childNode = $this->delegatingWidgetRenderer->renderWidget($widgetStatePath->getChildStatePath('contents'));
+        $childNode = $this->delegatingWidgetRenderer->renderWidget(
+            $widgetStatePath->getChildStatePath('contents'),
+            $program
+        );
         $htmlAttributes = [];
 
         return new RenderedWidget(
