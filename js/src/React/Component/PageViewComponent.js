@@ -15,15 +15,33 @@ export default class PageViewComponent extends React.PureComponent {
     constructor (props) {
         super(props);
 
-        this.reactElementFactoryRepository = props.reactElementFactoryRepository;
+        this.appState = props.appState;
 
         this.state = {
-            appState: props.appState
+            renderedViewsData: null
         };
-
-        this.valueProviderRepository = props.valueProviderRepository;
     }
 
+    componentDidMount () {
+        // Start the rendering process (asynchronous, as we need to talk to PHP-land)
+        this.renderViews();
+    }
+
+    /**
+     * Renders the data for a widget to a React element or plain text
+     *
+     * @param {Object} widgetData
+     * @param {Object} widgetData.attributes
+     * @param {Array} widgetData.children
+     * @param {string} widgetData.library
+     * @param {string} widgetData.tag
+     * @param {Array} widgetData.triggers
+     * @param {string} widgetData.type
+     * @param {string} widgetData.widget
+     * @param {string[]|number[]} widgetData.path
+     * @param {string|number} key
+     * @returns {Object|string}
+     */
     renderWidget (widgetData, key) {
         if (widgetData.type === 'text') {
             return widgetData.text;
@@ -38,28 +56,18 @@ export default class PageViewComponent extends React.PureComponent {
         if (widgetData.type === 'generic') {
             // "Generically"-rendered widgets do not define their child structure with rendered elements -
             // instead, they each map to a React component which can then structure them as needed
-            const elementFactory = this.reactElementFactoryRepository.getFactory(widgetData.library, widgetData.widget);
+            const elementFactory = this.props.reactElementFactoryRepository.getFactory(widgetData.library, widgetData.widget);
 
-            const dispatchEvent = (libraryName, eventName, eventPayload) => {
+            const dispatchEvent = async (libraryName, eventName, eventPayload) => {
+                const newAppState = await this.props.client.dispatchEvent(
+                    this.appState,
+                    widgetData.path,
+                    libraryName,
+                    eventName,
+                    eventPayload || {}
+                );
 
-                // FIXME: Decide whether/where to stop propagation
-                // event.stopPropagation();
-
-                this.setState((previousState, props) => {
-                    const newAppState = props.client.dispatchEvent(
-                        previousState.appState,
-                        widgetData.path,
-                        libraryName,
-                        eventName,
-                        eventPayload || {}
-                    );
-
-                    return newAppState === previousState.appState ?
-                        previousState :
-                        {
-                            appState: newAppState
-                        };
-                });
+                this.updateAppState(newAppState);
             };
 
             const attributes = Object.assign({}, widgetData.attributes, {
@@ -83,50 +91,27 @@ export default class PageViewComponent extends React.PureComponent {
                 key: uniqueId
             });
 
-
-
-            // TODO: actually make this
-            // const eventListenerProps = widgetData.triggerz.reduce((props, trigger) => {
-            //     // create event props per event
-            //     const eventProps = this.eventListenerFactory.createListeners(trigger.library, trigger.eventName)
-            //
-            //     // TODO: higher order function that takes all `onClick` functions and executes in order
-            // TODO: create this
-            // {
-            //     onClick: [fn, fn, fn]
-            // }
-            //
-            //     return Object.assign({}, props, eventProps);
-            // }, {});
-
             // TODO: Install these event listener props outside this component
             if (widgetData.tag === 'button' || widgetData.tag === 'a') {
-                attributes.onClick = (event) => {
+                attributes.onClick = async (event) => {
 
                     // FIXME: Decide whether/where to stop propagation
                     event.stopPropagation();
 
                     event.preventDefault();
 
-                    this.setState((previousState, props) => {
-                        const newAppState = props.client.dispatchEvent(
-                            previousState.appState,
-                            widgetData.path,
-                            'gui',
-                            'click',
-                            {
-                                // FIXME: Pass these in from the event data
-                                x: 200,
-                                y: 100
-                            }
-                        );
+                    const newAppState = await this.props.client.dispatchEvent(
+                        this.appState,
+                        widgetData.path,
+                        'gui',
+                        'click',
+                        {
+                            x: event.clientX,
+                            y: event.clientY
+                        }
+                    );
 
-                        return newAppState === previousState.appState ?
-                            previousState :
-                            {
-                                appState: newAppState
-                            };
-                    });
+                    this.updateAppState(newAppState);
                 }
             }
 
@@ -135,25 +120,17 @@ export default class PageViewComponent extends React.PureComponent {
                 // For fields, use a callback ref to give us access to the rendered DOM element
                 // so that we can fetch its value(s)/UI state
                 attributes.ref = (element) => {
-                    this.valueProviderRepository.setReferencedWidgetElement(widgetData.path, element);
+                    this.props.valueProviderRepository.setReferencedWidgetElement(widgetData.path, element);
                 };
 
                 // Support data binding by redrawing the page (if applicable)
                 // when a field is edited
                 // TODO: Optimise this to only add this change listener when the widget
                 //       sets a capture using an expression that reads one of its widget values
-                attributes.onChange = () => {
-                    this.setState((previousState, props) => {
-                        const newAppState = props.client.reevaluateUiState(
-                            previousState.appState
-                        );
+                attributes.onChange = async () => {
+                    const newAppState = await this.props.client.reevaluateUiState(this.appState);
 
-                        return newAppState === previousState.appState ?
-                            previousState :
-                            {
-                                appState: newAppState
-                            };
-                    });
+                    this.updateAppState(newAppState);
                 };
             }
 
@@ -192,10 +169,18 @@ export default class PageViewComponent extends React.PureComponent {
         throw new Error(`Widget type "${widgetData.type}" is not supported`);
     }
 
+    /**
+     * Renders all visible views to a React element or plain text
+     *
+     * @returns {Object|string}
+     */
     renderViewsData () {
-        const renderedViewsData = this.props.client.renderVisibleViews(this.state.appState);
+        if (this.state.renderedViewsData === null) {
+            // TODO: Use loading spinner or similar
+            return 'Loading...';
+        }
 
-        return renderedViewsData.map((viewData) => {
+        return this.state.renderedViewsData.map((viewData) => {
             return (
                 <div className="view" key={viewData['view-name']}>
                     { this.renderWidget(viewData.widget, null) }
@@ -204,11 +189,49 @@ export default class PageViewComponent extends React.PureComponent {
         });
     }
 
+    /**
+     * Renders the current display to a React element
+     *
+     * @returns {Object}
+     */
     render () {
         return (
             <div className="views">
                 { this.renderViewsData() }
             </div>
         )
+    }
+
+    /**
+     * Renders the visible views in PHP-land and then updates this React element's state
+     * with the resulting data structure
+     *
+     * @return {Promise<void>}
+     */
+    async renderViews () {
+        const renderedViewsData = await this.props.client.renderVisibleViews(this.appState);
+
+        // Update the rendered views data on the React element state
+        // so that we trigger a re-render as applicable
+        this.setState({
+            renderedViewsData: renderedViewsData
+        });
+    }
+
+    /**
+     * Updates the current Combyna AppState for this React element with a new one.
+     * If the given AppState is identical to the current one then no work will be done.
+     *
+     * @param {AppStateInterface} newAppState
+     */
+    updateAppState (newAppState) {
+        if (newAppState === this.appState) {
+            // Combyna AppState has not changed; nothing to do
+            return;
+        }
+
+        this.appState = newAppState;
+
+        this.renderViews();
     }
 }
