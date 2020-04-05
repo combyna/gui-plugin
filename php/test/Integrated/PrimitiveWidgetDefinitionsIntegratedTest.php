@@ -137,6 +137,6 @@ class PrimitiveWidgetDefinitionsIntegratedTest extends TestCase
     <div>Some text in here</div><button name="combyna-widget-my_view-root-1">Click me</button><hr><input name="combyna-widget-my_view-root-3" type="text" value="Some text in the box">
 </div>
 HTML;
-        static::assertSame($expectedHtml, $this->htmlRenderer->renderApp($appState));
+        static::assertSame($expectedHtml, $this->htmlRenderer->renderApp($appState, $this->app));
     }
 }
