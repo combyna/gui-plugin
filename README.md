@@ -1,7 +1,7 @@
 Combyna GUI plugin
 ==================
 
-[![Build Status](https://secure.travis-ci.org/combyna/gui-plugin.png?branch=master)](http://travis-ci.org/combyna/gui-plugin)
+[![Build Status](https://github.com/combyna/gui-plugin/workflows/CI/badge.svg)](https://github.com/combyna/gui-plugin/actions?query=workflow%3ACI)
 
 Base GUI support plugin for [Combyna](https://github.com/combyna/combyna).
 
