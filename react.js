@@ -7,11 +7,11 @@
  * https://github.com/combyna/gui-plugin/raw/master/MIT-LICENSE.txt
  */
 
-import createElementFactory from './js/src/React/Component/createElementFactory'
-import ReactElementFactoryRepository from './js/src/React/Component/ReactElementFactoryRepository';
-import PageViewComponent from './js/src/React/Component/PageViewComponent';
-import TriggerMappingRepository from './js/src/React/Component/TriggerMappingRepository';
-import WidgetValueProviderRepository from './js/src/React/Component/WidgetValueProviderRepository';
+import createElementFactory from './js/src/react/Component/createElementFactory'
+import ReactElementFactoryRepository from './js/src/react/Component/ReactElementFactoryRepository';
+import PageViewComponent from './js/src/react/Component/PageViewComponent';
+import TriggerMappingRepository from './js/src/react/Component/TriggerMappingRepository';
+import WidgetValueProviderRepository from './js/src/react/Component/WidgetValueProviderRepository';
 
 const builtinTriggerMappingRepository = new TriggerMappingRepository();
 const reactElementFactoryRepository = new ReactElementFactoryRepository(builtinTriggerMappingRepository);

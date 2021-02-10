@@ -199,7 +199,7 @@ export default class PageViewComponent extends React.PureComponent {
             <div className="views">
                 { this.renderViewsData() }
             </div>
-        )
+        );
     }
 
     /**
