@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1260d65b6fb3894dc3bb2102412674e2",
+    "content-hash": "38ced218c105c6959d4126ca3737b150",
     "packages": [],
     "packages-dev": [
         {
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/combyna/combyna.git",
-                "reference": "f8eec0578b4d10d539e26a6b000e41161a51ba7c"
+                "reference": "ca17b3475558bc61cf79d2bb99340dc7f2b7bdd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/combyna/combyna/zipball/f8eec0578b4d10d539e26a6b000e41161a51ba7c",
-                "reference": "f8eec0578b4d10d539e26a6b000e41161a51ba7c",
+                "url": "https://api.github.com/repos/combyna/combyna/zipball/ca17b3475558bc61cf79d2bb99340dc7f2b7bdd6",
+                "reference": "ca17b3475558bc61cf79d2bb99340dc7f2b7bdd6",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 }
             ],
             "description": "Combyna - build things.",
-            "time": "2021-02-10T20:12:46+00:00"
+            "time": "2021-02-10T22:24:21+00:00"
         },
         {
             "name": "combyna/php-peg",
@@ -641,6 +641,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-12-04T08:55:13+00:00"
         },
         {
