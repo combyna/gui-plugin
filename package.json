@@ -10,7 +10,7 @@
   "author": "Dan Phillimore <dan@ovms.co>",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^16.2.0"
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
