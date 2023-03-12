@@ -13,7 +13,7 @@
         }
     },
     "require-dev": {
-        "combyna/combyna": "dev-navigation",
-        "phpunit/phpunit": "^4.6"
+        "combyna/combyna": "dev-symfony3",
+        "phpunit/phpunit": "^4.1.0"
     }
 }
